@@ -14,10 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
+from django.contrib import admin
+
+def home(request):
+    return JsonResponse({"message": "SmartLearn Analytics backend is running"})
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('dashboard.urls')),
+    path("", home),
+    path("admin/", admin.site.urls),
+    path("api/", include("dashboard.urls")),
 ]

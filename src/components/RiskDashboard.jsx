@@ -54,6 +54,7 @@ export default function RiskDashboard() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="text-gray-600 mt-4">Loading risk analysis...</p>
+          <p className="text-sm text-gray-500 mt-2">Make sure Django backend is running on port 8000</p>
         </div>
       </div>
     )
