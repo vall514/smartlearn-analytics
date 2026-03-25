@@ -11,4 +11,6 @@ router.register(r'assignments', AssignmentViewSet)
 
 urlpatterns = [
     path('predictions/at-risk-students/', at_risk_students, name='at-risk-students'),
+    # alias for compatibility with older frontend routes
+    path('prediction/at-risk-students/', at_risk_students, name='at-risk-students-alias'),
 ] + router.urls
