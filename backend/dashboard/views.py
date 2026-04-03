@@ -1,35 +1,63 @@
 from django.db.models import Avg
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Student, Subject, Exam, Attendance, Assignment
 from .serializers import StudentSerializer, SubjectSerializer, ExamSerializer, AttendanceSerializer, AssignmentSerializer
 
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Each teacher only sees their own students
+        return Student.objects.filter(teacher=self.request.user)
+
+    def perform_create(self, serializer):
+        # When adding a student, automatically assign to logged in teacher
+        serializer.save(teacher=self.request.user)
 
 class SubjectViewSet(viewsets.ModelViewSet):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
+    permission_classes = [IsAuthenticated]
 
 class ExamViewSet(viewsets.ModelViewSet):
-    queryset = Exam.objects.all()
     serializer_class = ExamSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return exams for this teacher's students
+        return Exam.objects.filter(student__teacher=self.request.user)
 
 class AttendanceViewSet(viewsets.ModelViewSet):
-    queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return attendance for this teacher's students
+        return Attendance.objects.filter(student__teacher=self.request.user)
 
 class AssignmentViewSet(viewsets.ModelViewSet):
-    queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return assignments for this teacher's students
+        return Assignment.objects.filter(student__teacher=self.request.user)
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def at_risk_students(request):
-    students = Student.objects.all()
+    # Only get this teacher's students
+    students = Student.objects.filter(teacher=request.user)
     if not students.exists():
-        return Response({"message": "No students in database yet.", "at_risk": []})
+        return Response({
+            "message": "No students in database yet.",
+            "at_risk_students": [],
+            "all_students": [],
+        })
 
     results = []
     for student in students:

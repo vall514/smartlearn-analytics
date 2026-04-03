@@ -76,10 +76,11 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: rgb(var(--border));
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
     font-family: var(--font-body);
   }
   h1, h2, h3, h4, h5, h6 {
@@ -89,6 +90,9 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
+    background-color: rgba(var(--card), .8);
+    backdrop-filter: blur(0.5rem);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border: 1px solid rgba(var(--border), 0.5);
   }
 }

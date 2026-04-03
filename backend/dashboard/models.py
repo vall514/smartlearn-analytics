@@ -1,9 +1,16 @@
 from django.db import models
+from django.conf import settings
 
 class Student(models.Model):
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='students',
+        null=True
+    )
     name = models.CharField(max_length=100)
     admission_number = models.CharField(max_length=20, unique=True)
-    student_class = models.CharField(max_length=50)  # e.g., Form 1, Form 2
+    student_class = models.CharField(max_length=50)
     date_of_birth = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -20,8 +27,8 @@ class Subject(models.Model):
 class Exam(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    score = models.FloatField()  # e.g., 85.5
-    exam_type = models.CharField(max_length=50)  # e.g., Mid-term, Final
+    score = models.FloatField()
+    exam_type = models.CharField(max_length=50)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
 

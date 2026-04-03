@@ -3,14 +3,13 @@ from rest_framework.routers import DefaultRouter
 from .views import StudentViewSet, SubjectViewSet, ExamViewSet, AttendanceViewSet, AssignmentViewSet, at_risk_students
 
 router = DefaultRouter()
-router.register(r'students', StudentViewSet)
-router.register(r'subjects', SubjectViewSet)
-router.register(r'exams', ExamViewSet)
-router.register(r'attendances', AttendanceViewSet)
-router.register(r'assignments', AssignmentViewSet)
+router.register(r'students', StudentViewSet, basename='student')
+router.register(r'subjects', SubjectViewSet, basename='subject')
+router.register(r'exams', ExamViewSet, basename='exam')
+router.register(r'attendances', AttendanceViewSet, basename='attendance')
+router.register(r'assignments', AssignmentViewSet, basename='assignment')
 
 urlpatterns = [
     path('predictions/at-risk-students/', at_risk_students, name='at-risk-students'),
-    # alias for compatibility with older frontend routes
     path('prediction/at-risk-students/', at_risk_students, name='at-risk-students-alias'),
 ] + router.urls

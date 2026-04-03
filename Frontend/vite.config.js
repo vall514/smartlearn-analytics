@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  server: {
+    host: '127.0.0.1',  // Force Vite to use 127.0.0.1 instead of localhost
+    port: 5173
+  }
 })

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+AUTH_USER_MODEL = 'accounts.Teacher'
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # ← Add this FIRST
     'django.middleware.security.SecurityMiddleware',
@@ -104,9 +106,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "http://localhost:5174",
     "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

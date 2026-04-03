@@ -1,31 +1,47 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import StudentRiskCard from './StudentRiskCard'
 import RiskStats from './RiskStats'
-
-const API_BASE_URL = 'http://127.0.0.1:8000/api'
+import { getAtRiskStudents } from '../utils/api'
 
 export default function RiskDashboard() {
+  const navigate = useNavigate()
   const [data, setData] = useState({
     at_risk_students: [],
     all_students: [],
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [selectedRisk, setSelectedRisk] = useState('all') // 'all' or 'at-risk'
+  const [selectedRisk, setSelectedRisk] = useState('all')
+
+  // Get teacher name from localStorage
+  const teacher = JSON.parse(localStorage.getItem('teacher') || '{}')
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('teacher')
+    navigate('/login')
+  }
 
   useEffect(() => {
     const fetchRiskData = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`${API_BASE_URL}/predictions/at-risk-students/`)
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status}`)
-        }
-        const result = await response.json()
-        setData(result)
+        const response = await getAtRiskStudents()
+        setData({
+          at_risk_students: response.data.at_risk_students || [],
+          all_students: response.data.all_students || [],
+        })
         setError(null)
       } catch (err) {
-        setError(err.message)
+        if (err.response?.status === 401) {
+          // Token expired or invalid → send to login
+          localStorage.removeItem('token')
+          localStorage.removeItem('teacher')
+          navigate('/login')
+        } else {
+          setError(err.message)
+        }
         setData({ at_risk_students: [], all_students: [] })
       } finally {
         setLoading(false)
@@ -33,8 +49,6 @@ export default function RiskDashboard() {
     }
 
     fetchRiskData()
-
-    // Refresh data every 30 seconds
     const interval = setInterval(fetchRiskData, 30000)
     return () => clearInterval(interval)
   }, [])
@@ -52,21 +66,36 @@ export default function RiskDashboard() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading risk analysis...</p>
-          <p className="text-sm text-gray-500 mt-2">Make sure Django backend is running on port 8000</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+          <p className="text-gray-600 mt-4">Loading dashboard...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8">
+   
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8 space-y-8">
+      {/* Header with teacher name and logout */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+          <p className="text-gray-500 text-sm">
+            Welcome, {teacher.first_name} {teacher.last_name}
+          </p>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-100 transition"
+        >
+          Sign Out
+        </button>
+      </div>
+
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
           <h3 className="font-semibold">Error loading data</h3>
           <p className="text-sm">{error}</p>
-          <p className="text-sm mt-2">Make sure the Django server is running on http://127.0.0.1:8000</p>
         </div>
       )}
 
@@ -79,7 +108,7 @@ export default function RiskDashboard() {
           onClick={() => setSelectedRisk('all')}
           className={`px-4 py-2 font-medium border-b-2 transition-colors ${
             selectedRisk === 'all'
-              ? 'border-indigo-600 text-indigo-600'
+              ? 'border-teal-600 text-teal-600'
               : 'border-transparent text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -103,7 +132,7 @@ export default function RiskDashboard() {
           <p className="text-gray-500 text-lg">
             {selectedRisk === 'at-risk'
               ? 'No at-risk students found. Great job!'
-              : 'No student data available yet.'}
+              : 'No students added yet.'}
           </p>
         </div>
       ) : (
@@ -114,7 +143,6 @@ export default function RiskDashboard() {
         </div>
       )}
 
-      {/* Last Updated */}
       <div className="text-center text-sm text-gray-500 mt-8">
         Data updates automatically every 30 seconds
       </div>
