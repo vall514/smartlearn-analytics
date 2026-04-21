@@ -11,12 +11,12 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
     admission_number = models.CharField(max_length=20, unique=True)
     student_class = models.CharField(max_length=50)
-    date_of_birth = models.DateField(null=True, blank=True)
+    stream = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name} ({self.admission_number})"
-
+    
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
     code = models.CharField(max_length=10, unique=True)
@@ -25,9 +25,16 @@ class Subject(models.Model):
         return self.name
 
 class Exam(models.Model):
+    TERM_CHOICES = [
+        ('FIRST_TERM', 'First Term'),
+        ('SECOND_TERM', 'Second Term'),
+        ('THIRD_TERM', 'Third Term'),
+    ]
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     score = models.FloatField()
+    term = models.CharField(max_length=20, choices=TERM_CHOICES, blank=True, default='')
     exam_type = models.CharField(max_length=50)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -65,3 +72,16 @@ class Assignment(models.Model):
 
     def __str__(self):
         return f"{self.student.name} - {self.title}"
+
+
+class TopicPerformance(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    topic = models.CharField(max_length=100)
+    score = models.FloatField()
+    max_score = models.FloatField(default=100)
+    assessment_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.name} - {self.subject.name} - {self.topic}"

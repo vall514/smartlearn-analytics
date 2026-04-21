@@ -19,14 +19,14 @@ function Login() {
 
     try {
       const response = await loginTeacher(formData)
-      const { token, teacher } = response.data
-      
-      // Save to localStorage
+      const { token, refresh, teacher } = response.data
+
       localStorage.setItem('token', token)
+      localStorage.setItem('refresh', refresh)
       localStorage.setItem('teacher', JSON.stringify(teacher))
-      
-      // Redirect using React Router to preserve SPA navigation state
-      navigate('/dashboard')
+
+      // Full reload guarantees all protected requests use the fresh token immediately.
+      window.location.replace('/')
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please try again.')
     } finally {
@@ -46,19 +46,19 @@ function Login() {
         </div>
         <div className="bg-white rounded-2xl shadow p-8">
           {error && (
-            <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+            <div className="bg-amber-50 text-amber-700 px-4 py-3 rounded-lg mb-4 text-sm border border-amber-200">
               {error}
             </div>
           )}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email or Username</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="teacher@school.ac.ke"
+                placeholder="teacher@school.ac.ke or admin"
                 required
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
               />

@@ -28,9 +28,10 @@ function Signup() {
       const response = await signupTeacher(formData)
       // Save token and teacher info
       localStorage.setItem('token', response.data.token)
+      localStorage.setItem('refresh', response.data.refresh)
       localStorage.setItem('teacher', JSON.stringify(response.data.teacher))
-      // Redirect to dashboard
-      navigate('/dashboard')
+      // Redirect to home page
+      navigate('/')
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed. Please try again.')
     } finally {
@@ -54,7 +55,7 @@ function Signup() {
         {/* Form */}
         <div className="bg-white rounded-2xl shadow p-8">
           {error && (
-            <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+            <div className="bg-amber-50 text-amber-700 px-4 py-3 rounded-lg mb-4 text-sm border border-amber-200">
               {error}
             </div>
           )}

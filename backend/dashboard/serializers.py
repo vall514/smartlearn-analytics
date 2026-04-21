@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student, Subject, Exam, Attendance, Assignment
+from .models import Student, Subject, Exam, Attendance, Assignment, TopicPerformance
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,4 +33,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assignment
+        fields = '__all__'
+
+
+class TopicPerformanceSerializer(serializers.ModelSerializer):
+    student_name = serializers.CharField(source='student.name', read_only=True)
+    subject_name = serializers.CharField(source='subject.name', read_only=True)
+
+    class Meta:
+        model = TopicPerformance
         fields = '__all__'

@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db.models import Q
 from .models import Teacher
 
 @api_view(['POST'])
@@ -31,12 +32,15 @@ def signup(request):
     return Response({
         'message': 'Account created successfully',
         'token': str(refresh.access_token),
+        'refresh': str(refresh),
         'teacher': {
             'id': teacher.id,
             'email': teacher.email,
             'first_name': teacher.first_name,
             'last_name': teacher.last_name,
             'school_name': teacher.school_name,
+            'is_staff': teacher.is_staff,
+            'is_superuser': teacher.is_superuser,
         }
     }, status=status.HTTP_201_CREATED)
 
@@ -44,13 +48,21 @@ def signup(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
-    email = request.data.get('email')
+    identifier = (request.data.get('email') or request.data.get('username') or '').strip()
     password = request.data.get('password')
-    
-    # Find teacher by email
-    try:
-        teacher = Teacher.objects.get(email=email)
-    except Teacher.DoesNotExist:
+
+    if not identifier or not password:
+        return Response(
+            {'error': 'Email/username and password are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Allow login with either email or username.
+    teacher = Teacher.objects.filter(
+        Q(email__iexact=identifier) | Q(username__iexact=identifier)
+    ).first()
+
+    if not teacher:
         return Response(
             {'error': 'Invalid email or password'}, 
             status=status.HTTP_401_UNAUTHORIZED
@@ -62,6 +74,12 @@ def login(request):
             {'error': 'Invalid email or password'}, 
             status=status.HTTP_401_UNAUTHORIZED
         )
+
+    if not teacher.is_active:
+        return Response(
+            {'error': 'This account is inactive'},
+            status=status.HTTP_403_FORBIDDEN
+        )
     
     # Generate token
     refresh = RefreshToken.for_user(teacher)
@@ -69,11 +87,14 @@ def login(request):
     return Response({
         'message': 'Login successful',
         'token': str(refresh.access_token),
+        'refresh': str(refresh),
         'teacher': {
             'id': teacher.id,
             'email': teacher.email,
             'first_name': teacher.first_name,
             'last_name': teacher.last_name,
             'school_name': teacher.school_name,
+            'is_staff': teacher.is_staff,
+            'is_superuser': teacher.is_superuser,
         }
     })

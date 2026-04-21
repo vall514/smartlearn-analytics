@@ -15,13 +15,13 @@ export default function StudentRiskCard({ student }) {
 
   const color = getRiskColor(student.risk_score)
   const colorClasses = {
-    red: 'bg-red-50 border-red-200 text-red-900',
+    red: 'bg-amber-50 border-amber-200 text-amber-900',
     yellow: 'bg-yellow-50 border-yellow-200 text-yellow-900',
     green: 'bg-green-50 border-green-200 text-green-900',
   }
 
   const badgeClasses = {
-    red: 'bg-red-100 text-red-800',
+    red: 'bg-amber-100 text-amber-800',
     yellow: 'bg-yellow-100 text-yellow-800',
     green: 'bg-green-100 text-green-800',
   }
@@ -61,7 +61,7 @@ export default function StudentRiskCard({ student }) {
         <div className="w-full bg-gray-300 rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all ${
-              color === 'red' ? 'bg-red-500' : color === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'
+              color === 'red' ? 'bg-amber-500' : color === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'
             }`}
             style={{ width: `${(student.risk_score / 3) * 100}%` }}
           ></div>
