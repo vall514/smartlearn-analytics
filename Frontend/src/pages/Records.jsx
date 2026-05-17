@@ -14,7 +14,7 @@ const initialExam = {
   subject: '',
   score: '',
   term: 'FIRST_TERM',
-  exam_type: 'Exam',
+  exam_type: 'End of Term',
   date: '',
 }
 
@@ -216,7 +216,11 @@ export default function Records() {
                     <option value="THIRD_TERM">Third Term</option>
                   </select>
                 </div>
-                <input className="w-full rounded-xl border border-gray-300 px-4 py-2.5" type="text" placeholder="Exam type e.g. Midterm" value={examForm.exam_type} onChange={(e) => setExamForm({ ...examForm, exam_type: e.target.value })} required />
+                <select className="w-full rounded-xl border border-gray-300 px-4 py-2.5" value={examForm.exam_type} onChange={(e) => setExamForm({ ...examForm, exam_type: e.target.value })} required>
+                  <option value="First Trial">First Trial</option>
+                  <option value="Mid Term">Mid Term</option>
+                  <option value="End of Term">End of Term</option>
+                </select>
                 <input className="w-full rounded-xl border border-gray-300 px-4 py-2.5" type="date" value={examForm.date} onChange={(e) => setExamForm({ ...examForm, date: e.target.value })} required />
                 <button className="w-full rounded-xl bg-teal-600 px-4 py-3 font-medium text-white hover:bg-teal-700 transition" type="submit">Save Exam</button>
                 <FieldError message={formErrors.exam} />

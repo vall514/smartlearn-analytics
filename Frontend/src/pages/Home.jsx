@@ -18,23 +18,47 @@ export default function Home() {
           <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/20" />
           <div className="absolute right-20 bottom-4 h-20 w-20 rounded-full bg-white/10" />
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
-            <div className="lg:col-span-2">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
               <p className="text-cyan-100 text-sm font-semibold tracking-wide uppercase">Teacher Home</p>
               <h1 className="text-3xl md:text-4xl font-bold text-white mt-2">Welcome back, {teacherName}</h1>
               <p className="text-cyan-50/95 mt-3 max-w-2xl">
                 Track learner risk, manage students, and identify weak subjects or topics from one place.
               </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-white/15 backdrop-blur px-4 py-3 border border-white/20">
-                <p className="text-cyan-100 text-xs">Main Hub</p>
-                <p className="text-white font-semibold mt-1">Home</p>
+              <div className="flex flex-wrap gap-3 mt-6">
+                <Link to="/dashboard" className="px-6 py-2 bg-white/25 hover:bg-white/35 text-white font-semibold rounded-lg transition backdrop-blur">
+                  View Dashboard
+                </Link>
+                <Link to="/students" className="px-6 py-2 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-lg transition backdrop-blur border border-white/30">
+                  Manage Students
+                </Link>
               </div>
-              <div className="rounded-xl bg-white/15 backdrop-blur px-4 py-3 border border-white/20">
-                <p className="text-cyan-100 text-xs">Quick Route</p>
-                <p className="text-white font-semibold mt-1">Dashboard</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white/15 backdrop-blur rounded-xl p-5 border border-white/30 hover:bg-white/20 transition">
+                <div className="text-3xl font-bold text-white">📊</div>
+                <p className="text-cyan-100 text-xs font-semibold mt-3 uppercase tracking-wide">Quick Access</p>
+                <p className="text-white font-semibold mt-1">Analytics</p>
+                <p className="text-cyan-50/75 text-xs mt-1">Monitor trends</p>
+              </div>
+              <div className="bg-white/15 backdrop-blur rounded-xl p-5 border border-white/30 hover:bg-white/20 transition">
+                <div className="text-3xl font-bold text-white">👥</div>
+                <p className="text-cyan-100 text-xs font-semibold mt-3 uppercase tracking-wide">Management</p>
+                <p className="text-white font-semibold mt-1">Students</p>
+                <p className="text-cyan-50/75 text-xs mt-1">View & manage</p>
+              </div>
+              <div className="bg-white/15 backdrop-blur rounded-xl p-5 border border-white/30 hover:bg-white/20 transition">
+                <div className="text-3xl font-bold text-white">📝</div>
+                <p className="text-cyan-100 text-xs font-semibold mt-3 uppercase tracking-wide">Data Entry</p>
+                <p className="text-white font-semibold mt-1">Records</p>
+                <p className="text-cyan-50/75 text-xs mt-1">Add data</p>
+              </div>
+              <div className="bg-white/15 backdrop-blur rounded-xl p-5 border border-white/30 hover:bg-white/20 transition">
+                <div className="text-3xl font-bold text-white">⚡</div>
+                <p className="text-cyan-100 text-xs font-semibold mt-3 uppercase tracking-wide">Features</p>
+                <p className="text-white font-semibold mt-1">Explore</p>
+                <p className="text-cyan-50/75 text-xs mt-1">All tools</p>
               </div>
             </div>
           </div>

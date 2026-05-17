@@ -48,6 +48,7 @@ export default function AppNav({ rightActions = null }) {
           <NavLink to="/dashboard" label="Dashboard" isActive={location.pathname.startsWith('/dashboard')} />
           <NavLink to="/records" label="Records" isActive={location.pathname.startsWith('/records')} />
           <NavLink to="/students" label="Students" isActive={location.pathname.startsWith('/students')} />
+          <NavLink to="/report" label="Report" isActive={location.pathname.startsWith('/report')} />
           {isAdmin && (
             <a
               href="http://127.0.0.1:8000/admin/"

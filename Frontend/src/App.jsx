@@ -6,6 +6,7 @@ import Students from './pages/Students'
 import StudentInsights from './pages/StudentInsights'
 import Home from './pages/Home'
 import Records from './pages/Records'
+import Report from './pages/Report'
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token')
@@ -42,6 +43,14 @@ function App() {
           element={
             <PrivateRoute>
               <Records />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/report"
+          element={
+            <PrivateRoute>
+              <Report />
             </PrivateRoute>
           }
         />

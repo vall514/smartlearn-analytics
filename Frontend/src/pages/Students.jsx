@@ -17,7 +17,6 @@ export default function Students() {
   })
   const [formError, setFormError] = useState('')
   const [formLoading, setFormLoading] = useState(false)
-
   const fetchStudents = async () => {
     try {
       setLoading(true)
@@ -110,6 +109,16 @@ export default function Students() {
           <h2 className="text-2xl font-bold text-gray-900">Students</h2>
           <p className="text-gray-500 text-sm">Manage your students ({students.length} total)</p>
         </div>
+        {students.length > 0 && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate('/report')}
+              className="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-700 transition"
+            >
+              Open Report Center
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Add Student Form Popup */}

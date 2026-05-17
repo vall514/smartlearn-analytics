@@ -76,4 +76,37 @@ export const addAssignment = (data) => API.post('/assignments/', data)
 export const addTopicPerformance = (data) => API.post('/topic-performances/', data)
 export const getAtRiskStudents = () => API.get('/predictions/at-risk-students/')
 
+export const exportAllStudentsData = () => API.get('/students/export/', {
+    responseType: 'blob'
+})
+
+export const exportStudentDetails = (studentId) => API.get(
+    `/students/${studentId}/export/`,
+    { responseType: 'blob' }
+)
+
+// Helper function to trigger download
+export const downloadFile = (data, fileName) => {
+    let blob = null
+    if (data instanceof Blob) {
+        blob = data
+    } else {
+        try {
+            blob = new Blob([data])
+        } catch (e) {
+            // fallback: stringify
+            blob = new Blob([JSON.stringify(data)])
+        }
+    }
+
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', fileName)
+    document.body.appendChild(link)
+    link.click()
+    link.parentElement.removeChild(link)
+    window.URL.revokeObjectURL(url)
+}
+
 export default API
