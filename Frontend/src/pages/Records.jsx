@@ -29,6 +29,7 @@ const initialAssignment = {
   student: '',
   subject: '',
   title: '',
+  topic: '',
   due_date: '',
   submission_date: '',
   score: '',
@@ -269,6 +270,7 @@ export default function Records() {
                   {subjectOptions.map((subject) => <option key={subject.id} value={subject.id}>{subject.name} ({subject.code})</option>)}
                 </select>
                 <input className="w-full rounded-xl border border-gray-300 px-4 py-2.5" type="text" placeholder="Assignment title" value={assignmentForm.title} onChange={(e) => setAssignmentForm({ ...assignmentForm, title: e.target.value })} required />
+                <input className="w-full rounded-xl border border-gray-300 px-4 py-2.5" type="text" placeholder="Topic (e.g. Fractions, Algebra)" value={assignmentForm.topic} onChange={(e) => setAssignmentForm({ ...assignmentForm, topic: e.target.value })} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Due date (deadline)</label>

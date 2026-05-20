@@ -64,6 +64,7 @@ class Assignment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    topic = models.CharField(max_length=100, blank=True, null=True)
     score = models.FloatField(null=True, blank=True)
     max_score = models.FloatField(default=100)
     due_date = models.DateField()

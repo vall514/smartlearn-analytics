@@ -58,13 +58,19 @@ export default function Report() {
           text: shareText,
           url: window.location.origin + '/report',
         })
+        setStatus('Report shared successfully!')
       } else {
         await navigator.clipboard.writeText(shareText)
-        setStatus('Report summary copied to clipboard.')
+        setStatus('Report summary copied to clipboard (share not supported on this device).')
       }
     } catch (error) {
-      console.error('Share failed', error)
-      setStatus('Unable to share right now.')
+      if (error.name === 'AbortError') {
+        // User cancelled the share dialog - this is not an error
+        setStatus('Share cancelled.')
+      } else {
+        console.error('Share failed', error)
+        setStatus('Unable to share at this moment. You can copy the report summary manually.')
+      }
     }
   }
 
@@ -94,13 +100,19 @@ export default function Report() {
           text: shareText,
           url: window.location.origin + '/report',
         })
+        setStatus(`Report for ${student.name} shared successfully!`)
       } else {
         await navigator.clipboard.writeText(shareText)
-        setStatus(`Report summary for ${student.name} copied to clipboard.`)
+        setStatus(`Report summary for ${student.name} copied to clipboard (share not supported on this device).`)
       }
     } catch (error) {
-      console.error('Student share failed', error)
-      setStatus(`Unable to share report for ${student.name} right now.`)
+      if (error.name === 'AbortError') {
+        // User cancelled the share dialog - this is not an error
+        setStatus('Share cancelled.')
+      } else {
+        console.error('Student share failed', error)
+        setStatus(`Unable to share report for ${student.name}. You can copy the report summary manually.`)
+      }
     }
   }
 

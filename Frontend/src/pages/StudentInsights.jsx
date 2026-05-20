@@ -139,14 +139,22 @@ export default function StudentInsights() {
 
         <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">Weak Topics</h2>
+          <p className="text-xs text-gray-500 mb-3">Topics with scores below 60%, identified from assignment and assessment performance.</p>
           {weakTopics.length === 0 ? (
             <p className="text-sm text-gray-500">No weak topics identified yet.</p>
           ) : (
             <div className="space-y-2 max-h-72 overflow-auto">
               {weakTopics.map((topic, idx) => (
                 <div key={`${topic.subject}-${topic.topic}-${idx}`} className="rounded-lg bg-rose-50 px-3 py-2 text-sm">
-                  <p className="font-medium text-gray-900">{topic.subject} - {topic.topic}</p>
-                  <p className="text-rose-700">Score: {topic.score_percentage}%</p>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900">{topic.subject} - {topic.topic}</p>
+                      <p className="text-rose-700">Score: {topic.score_percentage}%</p>
+                    </div>
+                    <span className="text-xs bg-rose-100 text-rose-700 px-2 py-1 rounded whitespace-nowrap ml-2">
+                      {topic.source === 'assignment' ? 'Assignments' : 'Assessment'}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

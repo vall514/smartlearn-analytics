@@ -9,6 +9,8 @@ from .views import (
     TopicPerformanceViewSet,
     at_risk_students,
     student_insights,
+    export_students_data,
+    export_student_details,
 )
 
 router = DefaultRouter()
@@ -23,4 +25,6 @@ urlpatterns = [
     path('predictions/at-risk-students/', at_risk_students, name='at-risk-students'),
     path('prediction/at-risk-students/', at_risk_students, name='at-risk-students-alias'),
     path('students/<int:student_id>/insights/', student_insights, name='student-insights'),
+    path('students/export/', export_students_data, name='export-students-data'),
+    path('students/<int:student_id>/export/', export_student_details, name='export-student-details'),
 ] + router.urls
